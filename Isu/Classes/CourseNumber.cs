@@ -1,12 +1,25 @@
 namespace Isu.Classes
 {
-    public class CourseNumber
+    public enum CourseNumber
     {
-        public CourseNumber(int course)
-        {
-            NumberCourse = course;
-        }
+        /// <summary>
+        /// First year
+        /// </summary>
+        First = 1,
 
-        public int NumberCourse { get; }
+        /// <summary>
+        /// Second year
+        /// </summary>
+        Second = 2,
+
+        /// <summary>
+        /// Third year
+        /// </summary>
+        Third = 3,
+
+        /// <summary>
+        /// Fourth year
+        /// </summary>
+        Fourth = 4,
     }
 }

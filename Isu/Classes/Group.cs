@@ -5,13 +5,22 @@ namespace Isu.Classes
 {
     public class Group
     {
-        public Group(string name)
+        private int _count;
+        public Group(GroupName name)
         {
-            Name = new GroupName(name);
-            Students = new List<Student>();
+            Name = name;
         }
 
-        public List<Student> Students { get; } = new List<Student>();
         public GroupName Name { get; }
+        public int CountStudents()
+        {
+            ++_count;
+            return _count;
+        }
+
+        public int GetCountStudents()
+        {
+            return _count;
+        }
     }
 }
