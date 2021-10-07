@@ -21,21 +21,21 @@ namespace Shops.Tests
             Assert.Catch<ShopException>(() =>
             {
                 Shop shop = _shopManager.AddShop("Metro", "Lenin street, 13");
-                Product product = _shopManager.RegisterProduct("candy");
+                Product product1 = _shopManager.RegisterProduct("banana");
+                Product product2 = new Product("candy");
 
-                _shopManager.AddShopProduct(shop, product, 2, 14);
+                _shopManager.AddShopProduct(shop, product2, 2, 14);
             });
         }
 
         [Test]
         public void ChangeProductPriceToAnother_PriceChanged()
         {
-            const int newPrice = 30;
             Shop shop = _shopManager.AddShop("Lenta", "Kronverskiy pr., 24");
             Product product = _shopManager.RegisterProduct("milk");
             Product prod = _shopManager.AddShopProduct(shop, product, 10, 32);
-            _shopManager.ChangePriceProduct(shop, prod, newPrice);
-            Assert.AreEqual(newPrice, prod.Price);
+            _shopManager.ChangePriceProduct(shop, prod, 40);
+            Assert.AreEqual(40, prod.Price);
         }
 
         [Test]
