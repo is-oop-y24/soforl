@@ -4,9 +4,10 @@ namespace Shops.Classes
 {
     public class Shop
     {
+        private static int _id;
         public Shop(string name, string address)
         {
-            Id = new GenerateId().Id;
+            Id = GenerateId();
             Name = name;
             Address = address;
             Products = new List<Product>();
@@ -16,5 +17,11 @@ namespace Shops.Classes
         public string Name { get; }
         public string Address { get; }
         public List<Product> Products { get; }
+
+        private int GenerateId()
+        {
+            ++_id;
+            return _id;
+        }
     }
 }
