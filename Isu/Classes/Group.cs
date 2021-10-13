@@ -9,9 +9,12 @@ namespace Isu.Classes
         public Group(GroupName name)
         {
             Name = name;
+            Students = new List<Student>();
         }
 
         public GroupName Name { get; }
+        public List<Student> Students { get; }
+
         public int CountStudents()
         {
             ++_count;
