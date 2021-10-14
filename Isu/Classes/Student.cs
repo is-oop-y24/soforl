@@ -5,16 +5,14 @@ namespace Isu.Classes
     public class Student
     {
         private static int _counterId;
-        public Student(string name, Group studentGroup)
+        public Student(string name)
         {
             Name = name;
-            Group = studentGroup;
             Id = GenerateId();
         }
 
         public string Name { get; }
         public int Id { get; }
-        public Group Group { get; set; }
 
         private int GenerateId()
         {

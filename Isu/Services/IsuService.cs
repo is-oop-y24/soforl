@@ -10,7 +10,6 @@ namespace Isu.Services
     public class IsuService : IIsuService
     {
         private List<Group> _groups = new List<Group>();
-        private List<Student> _students = new List<Student>();
         private List<string> _possibleGroupNames = new List<string> { "M3" };
         private int _maxStudent = 0;
 
@@ -42,10 +41,9 @@ namespace Isu.Services
                 throw new IsuException("No place to add new student in this group");
             }
 
-            var student = new Student(name, group);
+            var student = new Student(name);
             group.CountStudents();
             group.Students.Add(student);
-            _students.Add(student);
             return student;
         }
 
@@ -83,7 +81,7 @@ namespace Isu.Services
 
         public List<Student> FindStudents(string groupName)
         {
-            foreach (var group in _groups)
+            foreach (Group group in _groups)
             {
                 if (group.Name.Name == groupName)
                 {
@@ -140,7 +138,24 @@ namespace Isu.Services
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            student.Group = newGroup;
+            bool checkStudentGroup = false;
+            foreach (Group group in _groups)
+            {
+                foreach (Student stud in group.Students)
+                {
+                    if (student.Id == stud.Id)
+                    {
+                        checkStudentGroup = true;
+                        group.DeleteStudent(student);
+                        newGroup.Students.Add(student);
+                    }
+                }
+            }
+
+            if (checkStudentGroup == false)
+            {
+                throw new IsuException("Invalid operation");
+            }
         }
     }
 }

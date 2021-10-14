@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Isu.Tools;
 
 namespace Isu.Classes
 {
@@ -14,6 +15,17 @@ namespace Isu.Classes
 
         public GroupName Name { get; }
         public List<Student> Students { get; }
+
+        public void DeleteStudent(Student student)
+        {
+            foreach (Student stud in Students)
+            {
+                if (stud.Id == student.Id)
+                {
+                    Students.Remove(stud);
+                }
+            }
+        }
 
         public int CountStudents()
         {
