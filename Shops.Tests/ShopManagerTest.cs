@@ -7,7 +7,7 @@ namespace Shops.Tests
 {
     public class ShopManagerTest
     {
-        private ShopManager _shopManager;
+        private IShopManager _shopManager;
 
         [SetUp]
         public void Setup()

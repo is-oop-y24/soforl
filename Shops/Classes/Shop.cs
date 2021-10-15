@@ -20,8 +20,7 @@ namespace Shops.Classes
 
         private int GenerateId()
         {
-            ++_id;
-            return _id;
+            return ++_id;
         }
     }
 }

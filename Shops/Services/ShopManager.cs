@@ -1,64 +1,20 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net.Sockets;
-using System.Security;
 using Shops.Classes;
 using Shops.Tools;
 
 namespace Shops.Services
 {
-    public class ShopManager
+    public class ShopManager : IShopManager
     {
-        private List<string> _listProducts = new List<string>
-        {
-            "banana",
-            "milk",
-            "bread",
-            "cheese",
-            "coffee",
-            "avocado",
-            "apple",
-            "carrot",
-            "chicken",
-            "orange",
-        };
-
         private List<Product> _allProducts = new List<Product>();
         private List<Shop> shops = new List<Shop>();
 
-        public void AddNewProductInList(string productName)
-        {
-            bool check = false;
-            foreach (string prod in _listProducts)
-            {
-                if (prod == productName)
-                {
-                    check = true;
-                }
-            }
-
-            if (check == false)
-            {
-                _listProducts.Add(productName);
-            }
-        }
-
         public Product RegisterProduct(string name)
         {
-            foreach (string prod in _listProducts)
-            {
-                if (name == prod)
-                {
-                    var newProduct = new Product(name);
-                    newProduct.Amount = int.MaxValue;
-                    _allProducts.Add(newProduct);
-                    return newProduct;
-                }
-            }
-
-            throw new ShopException("Invalid name of product");
+            var newProduct = new Product(name);
+            newProduct.Amount = int.MaxValue;
+            _allProducts.Add(newProduct);
+            return newProduct;
         }
 
         public Product AddShopProduct(Shop newShop, Product product, int amount,  int price)
@@ -70,6 +26,7 @@ namespace Shops.Services
                 if (products.Name == product.Name)
                 {
                     checkProductStorage = true;
+                    break;
                 }
             }
 
@@ -83,6 +40,7 @@ namespace Shops.Services
                 if (prod.Name == product.Name)
                 {
                     checkProductShop = true;
+                    break;
                 }
             }
 
@@ -118,11 +76,17 @@ namespace Shops.Services
         {
             foreach (Product prod in shop.Products)
             {
-                if ((nameProduct == prod.Name) && (prod.Amount >= amount) && (person.Money >= prod.Price * amount))
+                if (nameProduct == prod.Name)
                 {
-                    person.Money -= amount * prod.Price;
-                    prod.Amount -= amount;
-                    return shop;
+                    if (prod.Amount >= amount)
+                    {
+                        if (person.Money >= amount * prod.Price)
+                        {
+                            person.Money -= amount * prod.Price;
+                            prod.Amount -= amount;
+                            return shop;
+                        }
+                    }
                 }
             }
 
@@ -174,6 +138,7 @@ namespace Shops.Services
                     {
                         minPrice = prod.Price;
                         idShop = newShop.Id;
+                        break;
                     }
                 }
             }
