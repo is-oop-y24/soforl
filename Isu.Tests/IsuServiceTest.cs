@@ -31,9 +31,10 @@ namespace Isu.Tests
         [Test]
         public void ReachMaxStudentPerGroup_ThrowException()
         {
+            Group group = _isuService.AddGroup("M3210");
             Assert.Catch<IsuException>(() =>
             {
-                Group group = _isuService.AddGroup("M3210");
+                
                 for (int i = 1; i <= (_maxStudentAmount + 1); ++i)
                 {
                     _isuService.AddStudent(group,$"Sasha{i}");
@@ -41,24 +42,25 @@ namespace Isu.Tests
             });
         }
 
-        [Test]
-        public void CreateGroupWithInvalidName_ThrowException()
+        [TestCase("M212")]
+        [TestCase("P32fghj12")]
+        
+        public void CreateGroupWithInvalidName_ThrowException(string value)
         {
             Assert.Catch<IsuException>(() =>
             {
-                Group group = _isuService.AddGroup("M2212");
-                Group group1 = _isuService.AddGroup("P3212");
+                Group group = _isuService.AddGroup(value);
             });
         }
 
         [Test]
         public void TransferStudentToAnotherGroup_GroupChanged()
         {
+            Group group = _isuService.AddGroup("M3209");
+            Student student = _isuService.AddStudent(group, "Masha");
+            Student student2 = new Student("Misha");
             Assert.Catch<IsuException>(() =>
             {
-                Group group = _isuService.AddGroup("M3107");
-                Student student = _isuService.AddStudent(group, "Masha");
-                Student student2 = new Student("Misha");
                 _isuService.ChangeStudentGroup(student2, group);
             });
         }

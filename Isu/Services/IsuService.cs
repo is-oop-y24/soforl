@@ -20,10 +20,9 @@ namespace Isu.Services
 
         public Group AddGroup(string name)
         {
-            string speciality = name.Substring(0, 2);
             foreach (string item in _possibleGroupNames)
             {
-                if (speciality == item)
+                if (name.Substring(0, 2) == item)
                 {
                     var group = new Group(new GroupName(name));
                     _groups.Add(group);
@@ -42,7 +41,6 @@ namespace Isu.Services
             }
 
             var student = new Student(name);
-            group.CountStudents();
             group.Students.Add(student);
             return student;
         }
@@ -124,16 +122,7 @@ namespace Isu.Services
 
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
-            var groupCourse = new List<Group>();
-            foreach (Group group in _groups)
-            {
-                if (group.Name.CourseNumber == courseNumber)
-                {
-                    groupCourse.Add(group);
-                }
-            }
-
-            return groupCourse;
+            return _groups.Where(@group => @group.Name.CourseNumber == courseNumber).ToList();
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)
@@ -141,14 +130,11 @@ namespace Isu.Services
             bool checkStudentGroup = false;
             foreach (Group group in _groups)
             {
-                foreach (Student stud in group.Students)
+                if (group.Students.Contains(student))
                 {
-                    if (student.Id == stud.Id)
-                    {
-                        checkStudentGroup = true;
-                        group.DeleteStudent(student);
-                        newGroup.Students.Add(student);
-                    }
+                    checkStudentGroup = true;
+                    group.DeleteStudent(student);
+                    newGroup.Students.Add(student);
                 }
             }
 

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Isu.Tools;
 
 namespace Isu.Classes
 {
     public class Group
     {
-        private int _count;
         public Group(GroupName name)
         {
             Name = name;
@@ -18,24 +18,15 @@ namespace Isu.Classes
 
         public void DeleteStudent(Student student)
         {
-            foreach (Student stud in Students)
+            foreach (Student stud in Students.Where(stud => stud.Id == student.Id))
             {
-                if (stud.Id == student.Id)
-                {
-                    Students.Remove(stud);
-                }
+                Students.Remove(stud);
             }
-        }
-
-        public int CountStudents()
-        {
-            ++_count;
-            return _count;
         }
 
         public int GetCountStudents()
         {
-            return _count;
+            return Students.Count;
         }
     }
 }

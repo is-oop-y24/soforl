@@ -16,8 +16,7 @@ namespace Isu.Classes
 
         private int GenerateId()
         {
-            ++_counterId;
-            return _counterId;
+            return ++_counterId;
         }
     }
 }
