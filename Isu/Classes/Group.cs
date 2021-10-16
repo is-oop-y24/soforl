@@ -7,6 +7,12 @@ namespace Isu.Classes
 {
     public class Group
     {
+        public Group(Group group)
+        {
+            Name = group.Name;
+            Students = new List<Student>(group.Students);
+        }
+
         public Group(GroupName name)
         {
             Name = name;
@@ -22,6 +28,11 @@ namespace Isu.Classes
             {
                 Students.Remove(stud);
             }
+        }
+
+        public void AddStudent(Student student)
+        {
+            Students.Add(student);
         }
 
         public int GetCountStudents()

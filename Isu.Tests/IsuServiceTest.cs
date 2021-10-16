@@ -1,3 +1,4 @@
+using System.Numerics;
 using Isu.Classes;
 using Isu.Services;
 using Isu.Tools;
@@ -58,7 +59,7 @@ namespace Isu.Tests
         {
             Group group = _isuService.AddGroup("M3209");
             Student student = _isuService.AddStudent(group, "Masha");
-            Student student2 = new Student("Misha");
+            Student student2 = new Student("Misha", GenerateId.Id);
             Assert.Catch<IsuException>(() =>
             {
                 _isuService.ChangeStudentGroup(student2, group);

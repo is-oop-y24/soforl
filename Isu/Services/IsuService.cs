@@ -40,7 +40,7 @@ namespace Isu.Services
                 throw new IsuException("No place to add new student in this group");
             }
 
-            var student = new Student(name);
+            var student = new Student(name, GenerateId.Id);
             group.Students.Add(student);
             return student;
         }
@@ -134,7 +134,10 @@ namespace Isu.Services
                 {
                     checkStudentGroup = true;
                     group.DeleteStudent(student);
-                    newGroup.Students.Add(student);
+                    var reGroup = new Group(group);
+                    _groups.Remove(group);
+                    _groups.Add(reGroup);
+                    newGroup.AddStudent(student);
                 }
             }
 
