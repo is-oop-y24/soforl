@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using Isu.Classes;
 using Isu.Tools;
@@ -40,12 +41,12 @@ namespace Isu.Services
                 throw new IsuException("No place to add new student in this group");
             }
 
-            var student = new Student(name, GenerateId.Id);
+            var student = new Student(name, StudentId());
             group.Students.Add(student);
             return student;
         }
 
-        public Student GetStudent(int id)
+        public Student GetStudent(BigInteger id)
         {
             foreach (Group group in _groups)
             {
@@ -145,6 +146,13 @@ namespace Isu.Services
             {
                 throw new IsuException("Invalid operation");
             }
+        }
+
+        private BigInteger StudentId()
+        {
+            var id = Guid.NewGuid();
+            var idStudent = new BigInteger(id.ToByteArray());
+            return idStudent;
         }
     }
 }

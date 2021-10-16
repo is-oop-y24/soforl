@@ -59,7 +59,7 @@ namespace Isu.Tests
         {
             Group group = _isuService.AddGroup("M3209");
             Student student = _isuService.AddStudent(group, "Masha");
-            Student student2 = new Student("Misha", GenerateId.Id);
+            Student student2 = new Student("Misha", 97865432);
             Assert.Catch<IsuException>(() =>
             {
                 _isuService.ChangeStudentGroup(student2, group);
