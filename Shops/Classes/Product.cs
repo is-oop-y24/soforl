@@ -1,23 +1,53 @@
+using System;
+
 namespace Shops.Classes
 {
     public class Product
     {
-        private static int _id;
-        public Product(string name)
+        private string _productName;
+        private int _price;
+        private int _amount;
+        public Product(ProductBuilder product)
         {
-            Name = name.ToLower();
-            Id = GenerateId();
+            _productName = product.GetName();
+            _price = product.GetPrice();
+            _amount = product.GetAmount();
         }
 
-        public int Id { get; }
-        public int Price { get; set; }
-        public int Amount { get; set; }
-        public string Name { get; }
-
-        private int GenerateId()
+        public ProductBuilder ToBuild()
         {
-            ++_id;
-            return _id;
+            ProductBuilder productBuilder = new ();
+            productBuilder.BuildName(_productName);
+            productBuilder.BuildAmount(_amount);
+            productBuilder.BuildPrice(_price);
+            return productBuilder;
+        }
+
+        public string GetName()
+        {
+            return _productName;
+        }
+
+        public int GetAmount()
+        {
+            return _amount;
+        }
+
+        public int GetPrice()
+        {
+            return _price;
+        }
+
+        public int Price(int price)
+        {
+            _price = price;
+            return _price;
+        }
+
+        public int Amount(int amount)
+        {
+            _amount = amount;
+            return _amount;
         }
     }
 }

@@ -1,26 +1,45 @@
+using System;
 using System.Collections.Generic;
 
 namespace Shops.Classes
 {
     public class Shop
     {
-        private static int _id;
+        private string _shopName;
+        private string _shopAddress;
+        private Guid _shopId;
+        private List<Product> _shopProducts;
         public Shop(string name, string address)
         {
-            Id = GenerateId();
-            Name = name;
-            Address = address;
-            Products = new List<Product>();
+            _shopId = Guid.NewGuid();
+            _shopName = name;
+            _shopAddress = address;
+            _shopProducts = new List<Product>();
         }
 
-        public int Id { get; }
-        public string Name { get; }
-        public string Address { get; }
-        public List<Product> Products { get; }
-
-        private int GenerateId()
+        public void AddProduct(Product product)
         {
-            return ++_id;
+            _shopProducts.Add(product);
+        }
+
+        public string GetShopName()
+        {
+            return _shopName;
+        }
+
+        public string GetAddress()
+        {
+            return _shopAddress;
+        }
+
+        public Guid GetShopId()
+        {
+            return _shopId;
+        }
+
+        public List<Product> GetShopProducts()
+        {
+            return _shopProducts;
         }
     }
 }

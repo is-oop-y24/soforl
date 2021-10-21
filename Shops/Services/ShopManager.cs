@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Shops.Classes;
 using Shops.Tools;
 
@@ -7,12 +9,12 @@ namespace Shops.Services
     public class ShopManager : IShopManager
     {
         private List<Product> _allProducts = new List<Product>();
-        private List<Shop> shops = new List<Shop>();
+        private List<Shop> _shops = new List<Shop>();
 
-        public Product RegisterProduct(string name)
+        public Product RegisterProduct(string name, int amount, int price)
         {
-            var newProduct = new Product(name);
-            newProduct.Amount = int.MaxValue;
+            var prodBuild = new ProductBuilder();
+            Product newProduct = prodBuild.BuildName(name).BuildAmount(amount).BuildPrice(price).Build();
             _allProducts.Add(newProduct);
             return newProduct;
         }
@@ -23,7 +25,7 @@ namespace Shops.Services
             bool checkProductShop = false;
             foreach (Product products in _allProducts)
             {
-                if (products.Name == product.Name)
+                if (products.GetName() == product.GetName() && amount <= products.GetAmount())
                 {
                     checkProductStorage = true;
                     break;
@@ -35,9 +37,9 @@ namespace Shops.Services
                 throw new ShopException("Invalid name of product");
             }
 
-            foreach (Product prod in newShop.Products)
+            foreach (Product prod in newShop.GetShopProducts())
             {
-                if (prod.Name == product.Name)
+                if (prod.GetName() == product.GetName())
                 {
                     checkProductShop = true;
                     break;
@@ -46,18 +48,21 @@ namespace Shops.Services
 
             if (checkProductShop == false)
             {
-                var newProd = new Product(product.Name);
-                newProd.Price = price;
-                newProd.Amount += amount;
-                newShop.Products.Add(newProd);
-                return newProd;
+                var prodBuild = new ProductBuilder();
+                Product prod = prodBuild
+                    .BuildName(product.GetName())
+                    .BuildAmount(amount)
+                    .BuildPrice(price)
+                    .Build();
+                newShop.AddProduct(prod);
+                return prod;
             }
 
-            foreach (Product prod in newShop.Products)
+            foreach (Product prod in newShop.GetShopProducts())
             {
-                if (prod.Id == product.Id)
+                if (prod.GetName() == product.GetName())
                 {
-                    prod.Amount += amount;
+                    prod.Amount(amount + prod.GetAmount());
                     return prod;
                 }
             }
@@ -68,22 +73,22 @@ namespace Shops.Services
         public Shop AddShop(string name, string address)
         {
             var shop = new Shop(name, address);
-            shops.Add(shop);
+            _shops.Add(shop);
             return shop;
         }
 
         public Shop BuyProduct(Shop shop, Person person, string nameProduct, int amount)
         {
-            foreach (Product prod in shop.Products)
+            foreach (Product prod in shop.GetShopProducts())
             {
-                if (nameProduct == prod.Name)
+                if (nameProduct == prod.GetName())
                 {
-                    if (prod.Amount >= amount)
+                    if (prod.GetAmount() >= amount)
                     {
-                        if (person.Money >= amount * prod.Price)
+                        if (person.Money >= amount * prod.GetPrice())
                         {
-                            person.Money -= amount * prod.Price;
-                            prod.Amount -= amount;
+                            person.Money -= amount * prod.GetPrice();
+                            prod.Amount(prod.GetAmount() - amount);
                             return shop;
                         }
                     }
@@ -95,17 +100,17 @@ namespace Shops.Services
 
         public Shop DeliverCheapestProduct(Person person, string nameProduct, int amount)
         {
-            int newId = MinPriceProduct(nameProduct, amount);
-            foreach (Shop newShop in shops)
+            Guid newId = MinPriceProduct(nameProduct, amount);
+            foreach (Shop newShop in _shops)
             {
-                if (newShop.Id == newId)
+                if (newShop.GetShopId() == newId)
                 {
-                    foreach (Product prod in newShop.Products)
+                    foreach (Product prod in newShop.GetShopProducts())
                     {
-                        if ((prod.Name == nameProduct) && (person.Money >= prod.Price * amount))
+                        if ((prod.GetName() == nameProduct) && (person.Money >= prod.GetPrice() * amount))
                         {
-                            person.Money -= amount * prod.Price;
-                            prod.Amount -= amount;
+                            person.Money -= amount * prod.GetPrice();
+                            prod.Amount(prod.GetAmount() - amount);
                             return newShop;
                         }
                     }
@@ -117,33 +122,33 @@ namespace Shops.Services
 
         public void ChangePriceProduct(Shop shop, Product product, int newPrice)
         {
-            foreach (Product newProd in shop.Products)
+            foreach (Product newProd in shop.GetShopProducts())
             {
-                if (product.Id == newProd.Id)
+                if (product.GetName() == newProd.GetName())
                 {
-                    newProd.Price = newPrice;
+                    newProd.Price(newPrice);
                 }
             }
         }
 
-        public int MinPriceProduct(string nameProduct, int amount)
+        public Guid MinPriceProduct(string nameProduct, int amount)
         {
             int minPrice = int.MaxValue;
-            int idShop = -1;
-            foreach (Shop newShop in shops)
+            Guid idShop = default;
+            foreach (Shop newShop in _shops)
             {
-                foreach (Product prod in newShop.Products)
+                foreach (Product prod in newShop.GetShopProducts())
                 {
-                    if ((nameProduct == prod.Name) && (prod.Amount >= amount) && (prod.Price < minPrice))
+                    if ((nameProduct == prod.GetName()) && (prod.GetAmount() >= amount) && (prod.GetPrice() < minPrice))
                     {
-                        minPrice = prod.Price;
-                        idShop = newShop.Id;
+                        minPrice = prod.GetPrice();
+                        idShop = newShop.GetShopId();
                         break;
                     }
                 }
             }
 
-            if ((minPrice != int.MaxValue) && (idShop != -1))
+            if (minPrice != int.MaxValue)
             {
                 return idShop;
             }
