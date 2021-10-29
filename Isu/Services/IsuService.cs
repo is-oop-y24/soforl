@@ -148,6 +148,11 @@ namespace Isu.Services
             }
         }
 
+        public List<Group> GetGroups()
+        {
+            return _groups;
+        }
+
         private BigInteger StudentId()
         {
             var id = Guid.NewGuid();
