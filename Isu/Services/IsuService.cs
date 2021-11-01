@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Threading;
 using Isu.Classes;
 using Isu.Tools;
 
@@ -8,30 +10,45 @@ namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
-        private List<Group> Groups { get; } = new List<Group>();
+        private List<Group> _groups = new List<Group>();
+        private List<string> _possibleGroupNames = new List<string> { "M3" };
+        private int _maxStudent = 0;
+
+        public IsuService(int maxStudent)
+        {
+            _maxStudent = maxStudent;
+        }
+
         public Group AddGroup(string name)
         {
-            if (name[0] != 'M')
-                throw new IsuException("Invalid name of the group");
-            if (name[1] != '3')
-                throw new IsuException("Invalid name of the group");
-            Group group = new Group(name);
-            Groups.Add(group);
-            return group;
+            foreach (string item in _possibleGroupNames)
+            {
+                if (name.Substring(0, 2) == item)
+                {
+                    var group = new Group(new GroupName(name));
+                    _groups.Add(group);
+                    return group;
+                }
+            }
+
+            throw new IsuException("Invalid name of group");
         }
 
         public Student AddStudent(Group group, string name)
         {
-            if (group.Students.Count >= 28)
+            if (group.GetCountStudents() >= _maxStudent)
+            {
                 throw new IsuException("No place to add new student in this group");
-            Student student = new Student(name);
+            }
+
+            var student = new Student(name, StudentId());
             group.Students.Add(student);
             return student;
         }
 
-        public Student GetStudent(int id)
+        public Student GetStudent(BigInteger id)
         {
-            foreach (Group group in Groups)
+            foreach (Group group in _groups)
             {
                 foreach (Student student in group.Students)
                 {
@@ -47,7 +64,7 @@ namespace Isu.Services
 
         public Student FindStudent(string name)
         {
-            foreach (Group group in Groups)
+            foreach (Group group in _groups)
             {
                 foreach (Student student in group.Students)
                 {
@@ -63,7 +80,7 @@ namespace Isu.Services
 
         public List<Student> FindStudents(string groupName)
         {
-            foreach (Group group in Groups)
+            foreach (Group group in _groups)
             {
                 if (group.Name.Name == groupName)
                 {
@@ -76,24 +93,24 @@ namespace Isu.Services
 
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
-            List<Student> studentsCourse = new List<Student>();
-            foreach (Group group in Groups)
+            var studentCourse = new List<Student>();
+            foreach (Group group in _groups)
             {
                 if (group.Name.CourseNumber == courseNumber)
                 {
                     foreach (Student student in group.Students)
                     {
-                        studentsCourse.Add(student);
+                        studentCourse.Add(student);
                     }
                 }
             }
 
-            return studentsCourse;
+            return studentCourse;
         }
 
         public Group FindGroup(string groupName)
         {
-            foreach (Group group in Groups)
+            foreach (Group group in _groups)
             {
                 if (group.Name.Name == groupName)
                 {
@@ -106,31 +123,36 @@ namespace Isu.Services
 
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
-            List<Group> groupCourse = new List<Group>();
-            foreach (Group group in Groups)
-            {
-                if (group.Name.CourseNumber.NumberCourse == courseNumber.NumberCourse)
-                {
-                    groupCourse.Add(group);
-                }
-            }
-
-            return groupCourse;
+            return _groups.Where(@group => @group.Name.CourseNumber == courseNumber).ToList();
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            foreach (Group group in Groups)
+            bool checkStudentGroup = false;
+            foreach (Group group in _groups)
             {
-                foreach (Student st in group.Students.ToList())
+                if (group.Students.Contains(student))
                 {
-                    if (student.Id == st.Id)
-                    {
-                        group.Students.Remove(student);
-                        newGroup.Students.Add(student);
-                    }
+                    checkStudentGroup = true;
+                    group.DeleteStudent(student);
+                    var reGroup = new Group(group);
+                    _groups.Remove(group);
+                    _groups.Add(reGroup);
+                    newGroup.AddStudent(student);
                 }
             }
+
+            if (checkStudentGroup == false)
+            {
+                throw new IsuException("Invalid operation");
+            }
+        }
+
+        private BigInteger StudentId()
+        {
+            var id = Guid.NewGuid();
+            var idStudent = new BigInteger(id.ToByteArray());
+            return idStudent;
         }
     }
 }

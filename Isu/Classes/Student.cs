@@ -1,17 +1,18 @@
+using System;
+using System.Numerics;
 using Isu.Services;
 
 namespace Isu.Classes
 {
     public class Student
     {
-        private static int _counterId;
-        public Student(string name)
+        public Student(string name, BigInteger id)
         {
             Name = name;
-            Id = ++_counterId;
+            Id = id;
         }
 
         public string Name { get; }
-        public int Id { get; }
+        public BigInteger Id { get; }
     }
 }
