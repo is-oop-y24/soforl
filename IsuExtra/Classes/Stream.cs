@@ -6,9 +6,9 @@ using IsuExtra.Tools;
 
 namespace IsuExtra.Classes
 {
-    public class Stream // добавить кк
+    public class Stream
     {
-        private string _nameStream; // киб3
+        private string _nameStream;
         private int _numberStream;
         private List<Student> _studentsStream;
         private List<LessonOgnp> _streamSchedule;

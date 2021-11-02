@@ -11,7 +11,6 @@ namespace IsuExtra.Services
     public class IsuExtra : IIsuExtra
     {
         private List<Ognp> _allOgnp = new ();
-
         private List<Student> _signedUpStudents = new ();
         private int _maxStudent = 0;
 
@@ -77,7 +76,7 @@ namespace IsuExtra.Services
             return student;
         }
 
-        public Stream AddStudentStream(Stream stream, StudentSchedule studentSchedule)
+        public bool AddStudentStream(Stream stream, StudentSchedule studentSchedule)
         {
             if (stream.GetCountStudents() <= _maxStudent)
             {
@@ -88,13 +87,13 @@ namespace IsuExtra.Services
                         if (usualLesson.GetDayWeek() == lessonOgnp.GetDayWeek()
                             && usualLesson.GetNumberLesson() == lessonOgnp.GetNumberLesson())
                         {
-                            return stream;
+                            return false;
                         }
                     }
                 }
             }
 
-            return null;
+            return true;
         }
 
         public Stream AddOgnpLesson(Stream stream, int classroom, string teacher, int numberLesson, int dayWeek)
@@ -103,22 +102,22 @@ namespace IsuExtra.Services
             return stream;
         }
 
-        public bool AddStudentCourse(Course course, StudentSchedule studentSchedule)
+        public void AddStudentCourse(Course course, StudentSchedule studentSchedule)
         {
-            foreach (var stream in course.GetStreamCourse())
+            foreach (Stream stream in course.GetStreamCourse())
             {
-                if (AddStudentStream(stream, studentSchedule) != null)
+                if (AddStudentStream(stream, studentSchedule))
                 {
-                    foreach (var lesson in stream.GetLessonOgnp())
+                    foreach (LessonOgnp lesson in stream.GetLessonOgnp())
                     {
                         studentSchedule.GetScheduleOgnp().Add(lesson);
                         stream.GetStudentsStream().Add(studentSchedule.GetStudent());
-                        return true;
+                        return;
                     }
                 }
             }
 
-            return false;
+            throw new IsuExtraException("Invalid");
         }
 
         public StudentSchedule AddOgnpStudent(Ognp ognp, Student student, StudentSchedule studentSchedule)
@@ -139,24 +138,18 @@ namespace IsuExtra.Services
                 }
             }
 
-            foreach (var course in ognp.GetCourses())
+            foreach (Course course in ognp.GetCourses())
             {
-                if (AddStudentCourse(course, studentSchedule))
-                {
-                    if (!_signedUpStudents.Contains(student))
-                    {
-                        _signedUpStudents.Add(student);
-                        return studentSchedule;
-                    }
-                }
+                AddStudentCourse(course, studentSchedule);
             }
 
-            throw new IsuExtraException("Can not sign up student to course");
+            _signedUpStudents.Add(student);
+            return studentSchedule;
         }
 
         public void DeleteStudentOgnp(Ognp ognp, StudentSchedule studentSchedule)
         {
-            foreach (var course in ognp.GetCourses())
+            foreach (Course course in ognp.GetCourses())
             {
                 foreach (var stream in course.GetStreamCourse())
                 {
@@ -188,12 +181,9 @@ namespace IsuExtra.Services
             {
                 foreach (var stud in group.Students)
                 {
-                    foreach (var studOgnp in _signedUpStudents)
+                    if (!_signedUpStudents.Contains(stud))
                     {
-                        if (stud != studOgnp)
-                        {
-                            notSignedUpStudents.Add(stud);
-                        }
+                        notSignedUpStudents.Add(stud);
                     }
                 }
             }

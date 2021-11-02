@@ -5,7 +5,7 @@ namespace IsuExtra.Classes
 {
     public class Course
     {
-        private string _nameCourse; // название и фббревиатура
+        private string _nameCourse;
         private List<Stream> _courseStreams;
 
         public Course(string nameCourse)

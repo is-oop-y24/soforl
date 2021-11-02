@@ -5,7 +5,7 @@ using Isu.Classes;
 
 namespace IsuExtra.Classes
 {
-    public class StudentSchedule // добавить кк
+    public class StudentSchedule
     {
         private Student _student;
         private string _nameStudentGroup;
