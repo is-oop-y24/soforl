@@ -7,7 +7,20 @@ namespace Backups
 {
     public class SplitStorage : IAlgorithm
     {
-        public List<Storage> LocalBackup(List<JobObject> jobObjects, string repositoryPath, string directoryName, Guid id)
+        public List<Storage> CreateStorages(List<JobObject> jobObjects)
+        {
+            var storages = new List<Storage>();
+            foreach (JobObject jobObject in jobObjects)
+            {
+                var storage = new Storage();
+                storage.GetJobObjects().Add(jobObject);
+                storages.Add(storage);
+            }
+
+            return storages;
+        }
+
+        /*public List<Storage> LocalBackup(List<JobObject> jobObjects, string repositoryPath, string directoryName, Guid id)
         {
             var storages = new List<Storage>();
             foreach (JobObject jobObject in jobObjects)
@@ -41,6 +54,6 @@ namespace Backups
             }
 
             return storages;
-        }
+        }*/
     }
 }

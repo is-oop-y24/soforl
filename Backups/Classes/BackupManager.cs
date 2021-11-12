@@ -9,20 +9,20 @@ namespace Backups.Classes
         private BackupJob _backupJob;
         private Repository _repository;
 
-        public BackupManager(string path)
+        public BackupManager(DirectoryInfo directoryInfo)
         {
-            if (path == string.Empty)
+            if (directoryInfo.FullName == string.Empty)
             {
                 throw new Exception("Invalid path");
             }
 
-            if (!Directory.Exists(path))
+            if (!directoryInfo.Exists)
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(directoryInfo.FullName);
             }
 
             _backupJob = new BackupJob();
-            _repository = new Repository(path);
+            _repository = new Repository(directoryInfo);
         }
 
         public BackupJob GetBackupJob()

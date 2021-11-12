@@ -6,7 +6,6 @@ namespace Backups
 {
     public interface IAlgorithm
     {
-        public List<Storage> LocalBackup(List<JobObject> jobObjects, string repositoryPath, string directoryName, Guid id);
-        public List<Storage> AbstractBackup(List<JobObject> jobObjects, string repositoryPath, string directoryName, Guid id);
+        List<Storage> CreateStorages(List<JobObject> jobObjects);
     }
 }

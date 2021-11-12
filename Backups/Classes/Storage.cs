@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Backups.Classes
@@ -5,25 +6,22 @@ namespace Backups.Classes
     public class Storage
     {
         private List<JobObject> _jobObjects;
+        private Guid _id;
 
         public Storage()
         {
+            _id = Guid.NewGuid();
             _jobObjects = new List<JobObject>();
         }
-
-        /*public List<JobObject> ChangePath(List<JobObject> jobObjects)
-        {
-            foreach (JobObject item in jobObjects)
-            {
-                item.ChangePath(this.GetPath());
-            }
-
-            return jobObjects;
-        }*/
 
         public List<JobObject> GetJobObjects()
         {
             return _jobObjects;
+        }
+
+        public Guid GetStorageId()
+        {
+            return _id;
         }
     }
 }

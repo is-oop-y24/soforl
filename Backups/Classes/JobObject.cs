@@ -1,21 +1,18 @@
+using System.IO;
+
 namespace Backups.Classes
 {
-    public abstract class JobObject
+    public class JobObject
     {
-        private string _filePath;
-        public JobObject(string path)
+        private FileInfo fileInfo;
+        public JobObject(FileInfo fileInfo)
         {
-            _filePath = path;
+            this.fileInfo = fileInfo;
         }
 
         public string GetFilePath()
         {
-            return _filePath;
-        }
-
-        public void ChangePath(string path)
-        {
-            _filePath = path;
+            return $"{fileInfo.DirectoryName}/{fileInfo.Name}";
         }
     }
 }
