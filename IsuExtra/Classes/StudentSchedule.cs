@@ -8,11 +8,11 @@ namespace IsuExtra.Classes
     public class StudentSchedule
     {
         private Student _student;
-        private string _nameStudentGroup;
+        private GroupName _nameStudentGroup;
         private List<UsualLesson> _schedule;
         private List<LessonOgnp> _scheduleOgnp;
 
-        public StudentSchedule(string student, string groupName, BigInteger id)
+        public StudentSchedule(string student, GroupName groupName, BigInteger id)
         {
             _student = new Student(student, id);
             _nameStudentGroup = groupName;
@@ -33,7 +33,7 @@ namespace IsuExtra.Classes
 
         public string GetNameStudentGroup()
         {
-            return _nameStudentGroup;
+            return _nameStudentGroup.Name;
         }
 
         public List<UsualLesson> GetSchedule()
@@ -41,9 +41,31 @@ namespace IsuExtra.Classes
             return _schedule;
         }
 
+        public string GetStudentFaculty()
+        {
+            return _nameStudentGroup.Name.Substring(0, 2);
+        }
+
         public List<LessonOgnp> GetScheduleOgnp()
         {
             return _scheduleOgnp;
+        }
+
+        public Stream CrossingSchedules(Stream stream)
+        {
+            foreach (LessonOgnp lessonOgnp in stream.GetLessonOgnp())
+            {
+                foreach (UsualLesson usualLesson in _schedule)
+                {
+                    if (usualLesson.GetDayWeek() == lessonOgnp.GetDayWeek()
+                        && usualLesson.GetNumberLesson() == lessonOgnp.GetNumberLesson())
+                    {
+                        return null;
+                    }
+                }
+            }
+
+            return stream;
         }
     }
 }

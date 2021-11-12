@@ -36,7 +36,7 @@ namespace IsuExtra.Tests
             Group group2 = _isuService.AddGroup("M3205");
             Student student = _isuService.AddStudent(group2, "Boris");
 
-            var studentSchedule = _isuExtra.AddUsualLesson("Maths",2, 3, new StudentSchedule(student.Name, group2.Name.Name, student.Id));
+            var studentSchedule = _isuExtra.AddUsualLesson("Maths",2, 3, new StudentSchedule(student.Name, group2.Name, student.Id));
             
             Ognp ognp = _isuExtra.AddOgnp("Linux&Windows", "FTMI",  "Lin", "Win");
             var stream = _isuExtra.AddStream(ognp.GetCourse1(), "Lin1");
@@ -55,7 +55,7 @@ namespace IsuExtra.Tests
             Group group2 = _isuService.AddGroup("M3205");
             Student student = _isuService.AddStudent(group2, "Boris");
 
-            var studentSchedule = _isuExtra.AddUsualLesson("Maths",2, 3, new StudentSchedule(student.Name, group2.Name.Name, student.Id));
+            var studentSchedule = _isuExtra.AddUsualLesson("Maths",2, 3, new StudentSchedule(student.Name, group2.Name, student.Id));
             
             Ognp ognp = _isuExtra.AddOgnp("Linux&Windows", "TINT",  "Lin", "Win");
             var stream = _isuExtra.AddStream(ognp.GetCourse1(), "Lin1");

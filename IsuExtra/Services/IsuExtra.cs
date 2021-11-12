@@ -31,14 +31,11 @@ namespace IsuExtra.Services
         {
             var newCourse1 = new Course(course1);
             var newCourse2 = new Course(course2);
-            foreach (string newFaculty in _facultyNameGroup.Keys)
+            if (_facultyNameGroup.Keys.Any(newFaculty => newFaculty == faculty))
             {
-                if (newFaculty == faculty)
-                {
-                    var newOgnp = new Ognp(nameOgnp, faculty, newCourse1, newCourse2);
-                    _allOgnp.Add(newOgnp);
-                    return newOgnp;
-                }
+                var newOgnp = new Ognp(nameOgnp, faculty, newCourse1, newCourse2);
+                _allOgnp.Add(newOgnp);
+                return newOgnp;
             }
 
             throw new IsuExtraException("Invalid name of faculty");
@@ -50,12 +47,10 @@ namespace IsuExtra.Services
             {
                 foreach (Course course in ognp.GetCourses())
                 {
-                    if (courseOgnp == course)
-                    {
-                        var stream = new Stream(nameStream);
-                        course.GetStreamCourse().Add(stream);
-                        return stream;
-                    }
+                    if (courseOgnp != course) continue;
+                    var stream = new Stream(nameStream);
+                    course.GetStreamCourse().Add(stream);
+                    return stream;
                 }
             }
 
@@ -64,36 +59,13 @@ namespace IsuExtra.Services
 
         public StudentSchedule AddUsualLesson(string subject, int numberLesson, int dayWeek, StudentSchedule student)
         {
-            foreach (UsualLesson lesson in student.GetSchedule())
+            if (student.GetSchedule().Any(lesson => lesson.GetDayWeek() == dayWeek && lesson.GetNumberLesson() == numberLesson))
             {
-                if (lesson.GetDayWeek() == dayWeek && lesson.GetNumberLesson() == numberLesson)
-                {
-                    throw new IsuExtraException("Invalid lesson");
-                }
+                throw new IsuExtraException("Invalid lesson");
             }
 
             student.GetSchedule().Add(new UsualLesson(subject, numberLesson, dayWeek));
             return student;
-        }
-
-        public bool AddStudentStream(Stream stream, StudentSchedule studentSchedule)
-        {
-            if (stream.GetCountStudents() <= _maxStudent)
-            {
-                foreach (LessonOgnp lessonOgnp in stream.GetLessonOgnp())
-                {
-                    foreach (UsualLesson usualLesson in studentSchedule.GetSchedule())
-                    {
-                        if (usualLesson.GetDayWeek() == lessonOgnp.GetDayWeek()
-                            && usualLesson.GetNumberLesson() == lessonOgnp.GetNumberLesson())
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
         }
 
         public Stream AddOgnpLesson(Stream stream, int classroom, string teacher, int numberLesson, int dayWeek)
@@ -106,7 +78,7 @@ namespace IsuExtra.Services
         {
             foreach (Stream stream in course.GetStreamCourse())
             {
-                if (AddStudentStream(stream, studentSchedule))
+                if (stream.GetCountStudents() <= _maxStudent && studentSchedule.CrossingSchedules(stream) != null)
                 {
                     foreach (LessonOgnp lesson in stream.GetLessonOgnp())
                     {
@@ -127,15 +99,9 @@ namespace IsuExtra.Services
                 throw new IsuExtraException("Invalid operation");
             }
 
-            foreach (KeyValuePair<string, string> faculty in _facultyNameGroup)
+            if (_facultyNameGroup.Any(faculty => ognp.GetFaculty() == faculty.Key && studentSchedule.GetStudentFaculty() == faculty.Value))
             {
-                if (ognp.GetFaculty() == faculty.Key)
-                {
-                    if (studentSchedule.GetNameStudentGroup().Substring(0, 2) == faculty.Value)
-                    {
-                        throw new IsuExtraException("Invalid faculty");
-                    }
-                }
+                throw new IsuExtraException("Invalid faculty");
             }
 
             foreach (Course course in ognp.GetCourses())
@@ -151,7 +117,7 @@ namespace IsuExtra.Services
         {
             foreach (Course course in ognp.GetCourses())
             {
-                foreach (var stream in course.GetStreamCourse())
+                foreach (Stream stream in course.GetStreamCourse())
                 {
                     if (stream.GetStudentsStream().Contains(studentSchedule.GetStudent()))
                     {
@@ -177,15 +143,9 @@ namespace IsuExtra.Services
         public List<Student> GetNotSignedStudents()
         {
             var notSignedUpStudents = new List<Student>();
-            foreach (var group in _isuService.GetGroups())
+            foreach (Group group in _isuService.GetGroups())
             {
-                foreach (var stud in group.Students)
-                {
-                    if (!_signedUpStudents.Contains(stud))
-                    {
-                        notSignedUpStudents.Add(stud);
-                    }
-                }
+                notSignedUpStudents.AddRange(group.Students.Where(stud => !_signedUpStudents.Contains(stud)));
             }
 
             return notSignedUpStudents;

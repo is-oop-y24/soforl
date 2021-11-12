@@ -15,7 +15,7 @@ namespace IsuExtra.Classes
 
         public Stream(string nameStream)
         {
-            if (CheckStream(nameStream))
+            if (CheckNameStream(nameStream))
             {
                 _nameStream = nameStream;
                 _numberStream = int.Parse(nameStream.Substring(3, 1));
@@ -51,7 +51,7 @@ namespace IsuExtra.Classes
             return GetStudentsStream().Count;
         }
 
-        private bool CheckStream(string nameStream)
+        private bool CheckNameStream(string nameStream)
         {
             int numberStream = int.Parse(nameStream.Substring(3, 1));
             if (nameStream.Count() == 4 && numberStream is >= 1 and <= 6)
@@ -59,7 +59,7 @@ namespace IsuExtra.Classes
                 return true;
             }
 
-            throw new IsuExtraException("Invalid");
+            throw new IsuExtraException("Invalid name of Stream");
         }
     }
 }

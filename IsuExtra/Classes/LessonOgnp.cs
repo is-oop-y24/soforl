@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Isu.Classes;
+using IsuExtra.Tools;
 
 namespace IsuExtra.Classes
 {
@@ -14,7 +15,7 @@ namespace IsuExtra.Classes
 
         public LessonOgnp(Stream nameStream, int classroom, string teacher, int numberLesson, int dayWeek)
         {
-            if ((dayWeek is >= 1 and <= 6) && (numberLesson <= 6))
+            if (dayWeek is >= 1 and <= 6 && numberLesson <= 6)
             {
                 _nameStream = nameStream.GetNameStream();
                 _classroom = classroom;
