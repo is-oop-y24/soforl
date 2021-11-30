@@ -6,14 +6,14 @@ namespace Backups.Tests
 {
     public class BackupTests
     {
-        private Repository _repository;
+        private IRepository _repository;
         private BackupManager _backupManager;
 
         [SetUp]
         public void Setup()
         {
-            _repository = new Repository(new DirectoryInfo("../../../Backups"));
-            _backupManager = new BackupManager(new DirectoryInfo(_repository.GetPath()));
+            _repository = new AbstractRepository(new DirectoryInfo("../../../Backups"));
+            _backupManager = new BackupManager(_repository);
         }
 
         [Test]
@@ -24,9 +24,9 @@ namespace Backups.Tests
             JobObject jobObject2 = new JobObject(new FileInfo(@"../../../Files/File_B"));
             _backupManager.AddJobObject(jobObject1);
             _backupManager.AddJobObject(jobObject2);
-            _backupManager.BeginAbstractBackup(new SplitStorage());
+            _backupManager.BeginBackup(new SplitStorage());
             _backupManager.RemoveJobObject(jobObject2);
-            _backupManager.BeginAbstractBackup(new SplitStorage());
+            _backupManager.BeginBackup(new SplitStorage());
 
             Assert.AreEqual(_backupManager.GetBackupJob().GetRestorePoints().Count, 2);
             Assert.AreEqual(_backupManager.GetBackupJob().GetRestorePoints()[0].GetStorages().Count, 2);
