@@ -4,25 +4,25 @@ namespace Banks.Classes
     {
         private Bank _bank;
         private double _percentage;
-        private double _sum1;
-        private double _newSum;
+        private double _lowerBorderSum;
+        private double _upperBorderSum;
 
-        public ConcretePercentageDepositAccount(Bank bank, double percentage, double sum1, double sum2)
+        public ConcretePercentageDepositAccount(Bank bank, double percentage, double lowerBorderSum, double upperBorderSum)
         {
             _bank = bank;
             _percentage = percentage;
-            _newSum = sum2;
-            _sum1 = sum1;
+            _upperBorderSum = upperBorderSum;
+            _lowerBorderSum = lowerBorderSum;
         }
 
         public double GetSum2()
         {
-            return _newSum;
+            return _upperBorderSum;
         }
 
         public double GetSum1()
         {
-            return _sum1;
+            return _lowerBorderSum;
         }
 
         public double GetPercentage()

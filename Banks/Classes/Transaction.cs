@@ -4,20 +4,15 @@ namespace Banks.Classes
 {
     public class Transaction
     {
-        private Guid _idTransaction;
-        private DateTime _timeTransaction;
-        private double _sumTransaction;
-
         public Transaction(double sum)
         {
-            _idTransaction = Guid.NewGuid();
-            _timeTransaction = DateTime.Now;
-            _sumTransaction = sum;
+            Id = Guid.NewGuid();
+            Time = DateTime.Now;
+            Sum = sum;
         }
 
-        public double GetSumTransaction()
-        {
-            return _sumTransaction;
-        }
+        public Guid Id { get; }
+        public DateTime Time { get; }
+        public double Sum { get; }
     }
 }

@@ -2,38 +2,40 @@ using System.Collections.Generic;
 
 namespace Banks.Classes
 {
-    public class Bank : IObserver
+    public class Bank : IObservable
     {
-        private List<Client> _clients;
-        private List<ConcretePercentageDepositAccount> _percentages;
-        private List<BankAccount> _bankAccounts;
-        private double _transferLimit;
-        private string _name;
-
         public Bank(string name, double transferLimit)
         {
-            _name = name;
-            _clients = new List<Client>();
-            _bankAccounts = new List<BankAccount>();
-            _transferLimit = transferLimit;
-            _percentages = new List<ConcretePercentageDepositAccount>();
+            Name = name;
+            Clients = new List<Client>();
+            BankAccounts = new List<BankAccount>();
+            TransferLimit = transferLimit;
+            Percentages = new List<ConcretePercentageDepositAccount>();
+            Observers = new List<IObserver>();
         }
+
+        public List<Client> Clients { get; }
+        public List<ConcretePercentageDepositAccount> Percentages { get; }
+        public List<BankAccount> BankAccounts { get; }
+        public double TransferLimit { get; private set; }
+        public string Name { get; }
+        public List<IObserver> Observers { get; }
 
         public List<BankAccount> GetBankAccounts()
         {
-            return _bankAccounts;
+            return BankAccounts;
         }
 
         public double GetTransferLimit()
         {
-            return _transferLimit;
+            return TransferLimit;
         }
 
         public void AddPercentageSum(double percentage, double sumAccount)
         {
             double left = -1;
             double right = int.MaxValue;
-            foreach (ConcretePercentageDepositAccount percentageDeposit in _percentages)
+            foreach (ConcretePercentageDepositAccount percentageDeposit in Percentages)
             {
                 if (right > percentageDeposit.GetSum2() - sumAccount && right > 0
                     && left < sumAccount - percentageDeposit.GetSum2() && left < 0)
@@ -44,7 +46,7 @@ namespace Banks.Classes
             }
 
             var percentage2 = new ConcretePercentageDepositAccount(this, percentage, sumAccount - left, sumAccount);
-            _percentages.Add(percentage2);
+            Percentages.Add(percentage2);
         }
 
         public double CheckPercentage(double sumAccount)
@@ -52,7 +54,7 @@ namespace Banks.Classes
             double left = -1;
             double right = int.MaxValue;
             double percentage = 0;
-            foreach (ConcretePercentageDepositAccount percentageDeposit in _percentages)
+            foreach (ConcretePercentageDepositAccount percentageDeposit in Percentages)
             {
                 if (right > percentageDeposit.GetSum2() - sumAccount && right > 0
                     && left < sumAccount - percentageDeposit.GetSum2() && left < 0)
@@ -68,36 +70,75 @@ namespace Banks.Classes
 
         public double ChangeTransferLimit(double newTransferLimit)
         {
-            _transferLimit = newTransferLimit;
-            return _transferLimit;
+            TransferLimit = newTransferLimit;
+            return TransferLimit;
         }
 
         public void CancelTransaction(BankAccount bankAccount1, BankAccount bankAccount2, Transaction transaction)
         {
-            foreach (Transaction item in bankAccount1.GetTransactions())
+            foreach (Transaction item in bankAccount1.Transactions)
             {
-                if (transaction == item)
+                if (transaction.Id == item.Id)
                 {
-                    if (item.GetSumTransaction() > 0)
+                    if (item.Sum > 0)
                     {
-                        bankAccount1.WithdrawPartMoney(item.GetSumTransaction());
-                        bankAccount2.DepositMoney(item.GetSumTransaction());
+                        bankAccount1.WithdrawPartMoney(item.Sum);
+                        bankAccount2.DepositMoney(item.Sum);
                         break;
                     }
 
-                    if (item.GetSumTransaction() < 0)
+                    if (item.Sum < 0)
                     {
-                        bankAccount1.DepositMoney(item.GetSumTransaction() * (-1));
-                        bankAccount2.WithdrawPartMoney(item.GetSumTransaction() * (-1));
+                        bankAccount1.DepositMoney(item.Sum * (-1));
+                        bankAccount2.WithdrawPartMoney(item.Sum * (-1));
                         break;
                     }
                 }
             }
         }
 
-        public void NotifyPercentageChanges(BankAccount bankAccount)
+        public void CancelTransaction(BankAccount bankAccount, Transaction transaction)
         {
-            bankAccount.NotifyObservers();
+            foreach (Transaction item in bankAccount.Transactions)
+            {
+                if (transaction.Id == item.Id)
+                {
+                    if (item.Sum > 0)
+                    {
+                        bankAccount.WithdrawPartMoney(item.Sum);
+                        break;
+                    }
+
+                    if (item.Sum < 0)
+                    {
+                        bankAccount.DepositMoney(item.Sum * (-1));
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void AddObserver(IObserver observer)
+        {
+            Observers.Add(observer);
+        }
+
+        public void RemoveObserver(IObserver observer)
+        {
+            Observers.Remove(observer);
+        }
+
+        public void NotifyObservers(BankAccount bankAccount, double operation)
+        {
+            foreach (IObserver observer in Observers)
+            {
+                observer.Update(bankAccount, operation);
+            }
+        }
+
+        public List<Client> GetClients()
+        {
+            return Clients;
         }
     }
 }

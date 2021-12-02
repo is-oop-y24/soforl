@@ -4,6 +4,6 @@ namespace Banks.Classes
     {
         void AddObserver(IObserver observer);
         void RemoveObserver(IObserver observer);
-        void NotifyObservers();
+        void NotifyObservers(BankAccount bankAccount, double operation);
     }
 }

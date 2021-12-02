@@ -5,56 +5,48 @@ namespace Banks.Classes
 {
     public class Client
     {
-        private static string _clientFirstName;
-        private static string _clientLastName;
-        private static string _clientAddress;
-        private static string _clientPassport;
-        private static bool _clientFinishedRegistration;
-
-        public Client(string firstName, string lastName, string address, string passport, bool checkRegistration)
+        public Client(string firstName, string lastName, string address, string passport)
         {
-            _clientFirstName = firstName;
-            _clientLastName = lastName;
-            _clientAddress = address;
-            _clientPassport = passport;
-            _clientFinishedRegistration = checkRegistration;
+            FirstName = firstName;
+            LastName = lastName;
+            Address = address;
+            Passport = passport;
             ClientAccounts = new Dictionary<Bank, BankAccount>();
         }
 
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string Address { get; private set; }
+        public string Passport { get; private set; }
         public Dictionary<Bank, BankAccount> ClientAccounts { get; }
 
-        public static ClientBuilder ToBuild(ClientBuilder client)
+        public void AddAddress(string address)
         {
-            client.BuildFirstName(_clientFirstName)
-                .BuildLastName(_clientLastName)
-                .BuildAddress(_clientAddress)
-                .BuildPassport(_clientPassport);
+            Address = address;
+        }
+
+        public void AddPassport(string passport)
+        {
+            Passport = passport;
+        }
+
+        public ClientBuilder ToBuild(ClientBuilder client)
+        {
+            client.BuildFirstName(FirstName)
+                .BuildLastName(LastName)
+                .BuildAddress(Address)
+                .BuildPassport(Passport);
             return client;
         }
 
-        public string GetFirstName()
+        public bool CheckRegistration()
         {
-            return _clientFirstName;
-        }
+            if (Address != null && Passport != null)
+            {
+                return true;
+            }
 
-        public string GetLastName()
-        {
-            return _clientLastName;
-        }
-
-        public string GetAddress()
-        {
-            return _clientAddress;
-        }
-
-        public string GetPassport()
-        {
-            return _clientPassport;
-        }
-
-        public bool GetRegistration()
-        {
-            return _clientFinishedRegistration;
+            return false;
         }
 
         public Dictionary<Bank, BankAccount> AddBankAccount(Bank bank, BankAccount bankAccount)
@@ -69,7 +61,6 @@ namespace Banks.Classes
             private string _clientLastName;
             private string _clientAddress = null;
             private string _clientPassport = null;
-            private bool _clientFinishedRegistration = false;
 
             public ClientBuilder BuildFirstName(string firstName)
             {
@@ -105,12 +96,7 @@ namespace Banks.Classes
 
             public Client Build()
             {
-                if (_clientPassport != null && _clientAddress != null)
-                {
-                    _clientFinishedRegistration = true;
-                }
-
-                var client = new Client(_clientFirstName, _clientLastName, _clientAddress, _clientPassport, _clientFinishedRegistration);
+                var client = new Client(_clientFirstName, _clientLastName, _clientAddress, _clientPassport);
 
                 return client;
             }

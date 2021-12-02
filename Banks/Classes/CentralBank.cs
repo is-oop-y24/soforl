@@ -14,39 +14,33 @@ namespace Banks.Classes
             return bank;
         }
 
-        public Client AddClient(string firstName, string lastName)
+        public Client AddClient(Bank bank, string firstName, string lastName, string passport = "", string address = "")
         {
-            Client client = new Client.ClientBuilder()
-                .BuildFirstName(firstName)
-                .BuildLastName(lastName)
-                .Build();
-            return client;
+            if (!string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))
+            {
+                Client client = new Client.ClientBuilder()
+                    .BuildFirstName(firstName)
+                    .BuildLastName(lastName)
+                    .BuildPassport(passport)
+                    .BuildAddress(address)
+                    .Build();
+                bank.GetClients().Add(client);
+                return client;
+            }
+
+            throw new Exception("Invalid client");
         }
 
         public Client AddClientAddress(string address, Client client)
         {
-            var clientBuilder = new Client.ClientBuilder();
-            Client newClient = Client
-                .ToBuild(clientBuilder)
-                .BuildAddress(address)
-                .BuildPassport(client.GetPassport())
-                .BuildFirstName(client.GetFirstName())
-                .BuildLastName(client.GetLastName())
-                .Build();
-            return newClient;
+            client.AddAddress(address);
+            return client;
         }
 
         public Client AddClientPassport(string passport, Client client)
         {
-            var clientBuilder = new Client.ClientBuilder();
-            Client newClient = Client
-                .ToBuild(clientBuilder)
-                .BuildPassport(passport)
-                .BuildAddress(client.GetAddress())
-                .BuildFirstName(client.GetFirstName())
-                .BuildLastName(client.GetLastName())
-                .Build();
-            return newClient;
+            client.AddPassport(passport);
+            return client;
         }
 
         public BankAccount AddCreditAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing, int daysCommission)
