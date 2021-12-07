@@ -33,6 +33,11 @@ namespace Backups.Classes
             _jobObjects.Remove(jobObject);
         }
 
+        public void RemoveRestorePoint(RestorePoint restorePoint)
+        {
+            _restorePoints.Remove(restorePoint);
+        }
+
         public void AddRestorePoint(RestorePoint restorePoint)
         {
             _restorePoints.Add(restorePoint);

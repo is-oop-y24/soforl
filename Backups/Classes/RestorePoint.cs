@@ -33,5 +33,10 @@ namespace Backups.Classes
         {
             return _directoryName;
         }
+
+        public DateTime GetDate()
+        {
+            return _dateBackup;
+        }
     }
 }
