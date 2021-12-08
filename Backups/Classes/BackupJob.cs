@@ -4,43 +4,33 @@ namespace Backups.Classes
 {
     public class BackupJob
     {
-        private List<JobObject> _jobObjects;
-        private List<RestorePoint> _restorePoints;
-
         public BackupJob()
         {
-            _jobObjects = new List<JobObject>();
-            _restorePoints = new List<RestorePoint>();
+            JobObjects = new List<JobObject>();
+            RestorePoints = new List<RestorePoint>();
         }
 
-        public List<JobObject> GetJobObjects()
-        {
-            return _jobObjects;
-        }
-
-        public List<RestorePoint> GetRestorePoints()
-        {
-            return _restorePoints;
-        }
+        public List<JobObject> JobObjects { get; }
+        public List<RestorePoint> RestorePoints { get; }
 
         public void AddJobObject(JobObject jobObject)
         {
-            _jobObjects.Add(jobObject);
+            JobObjects.Add(jobObject);
         }
 
         public void RemoveJobObject(JobObject jobObject)
         {
-            _jobObjects.Remove(jobObject);
+            JobObjects.Remove(jobObject);
         }
 
         public void RemoveRestorePoint(RestorePoint restorePoint)
         {
-            _restorePoints.Remove(restorePoint);
+            RestorePoints.Remove(restorePoint);
         }
 
         public void AddRestorePoint(RestorePoint restorePoint)
         {
-            _restorePoints.Add(restorePoint);
+            RestorePoints.Add(restorePoint);
         }
     }
 }

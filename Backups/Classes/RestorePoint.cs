@@ -5,38 +5,18 @@ namespace Backups.Classes
 {
     public class RestorePoint
     {
-        private List<Storage> _storages;
-        private Guid _id;
-        private string _directoryName;
-        private DateTime _dateBackup;
-
         public RestorePoint()
         {
-            _dateBackup = DateTime.Now;
-            _directoryName =
-                $"Directory-{_dateBackup.Day}-{_dateBackup.Month}-{_dateBackup.Year}_{_dateBackup.Hour}_{_dateBackup.Minute}_{_dateBackup.Second}";
-            _storages = new List<Storage>();
-            _id = Guid.NewGuid();
+            DateBackup = DateTime.Now;
+            DirectoryName =
+                $"Directory-{DateBackup.Day}-{DateBackup.Month}-{DateBackup.Year}_{DateBackup.Hour}_{DateBackup.Minute}_{DateBackup.Second}";
+            Storages = new List<Storage>();
+            Id = Guid.NewGuid();
         }
 
-        public List<Storage> GetStorages()
-        {
-            return _storages;
-        }
-
-        public Guid GetRestorePointId()
-        {
-            return _id;
-        }
-
-        public string GetDirectoryName()
-        {
-            return _directoryName;
-        }
-
-        public DateTime GetDate()
-        {
-            return _dateBackup;
-        }
+        public List<Storage> Storages { get; }
+        public Guid Id { get; }
+        public string DirectoryName { get; }
+        public DateTime DateBackup { get; }
     }
 }

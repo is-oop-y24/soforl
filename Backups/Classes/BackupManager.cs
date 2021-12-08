@@ -6,37 +6,32 @@ namespace Backups.Classes
 {
     public class BackupManager
     {
-        private BackupJob _backupJob;
-        private IRepository _repository;
-
         public BackupManager(IRepository repository)
         {
-            _backupJob = new BackupJob();
-            _repository = repository;
+            BackupJob = new BackupJob();
+            Repository = repository;
         }
 
-        public BackupJob GetBackupJob()
-        {
-            return _backupJob;
-        }
+        public BackupJob BackupJob { get; }
+        private IRepository Repository { get; }
 
         public void AddJobObject(JobObject jobObject)
         {
-            _backupJob.GetJobObjects().Add(jobObject);
+            BackupJob.JobObjects.Add(jobObject);
         }
 
         public void RemoveJobObject(JobObject jobObject)
         {
-            _backupJob.GetJobObjects().Remove(jobObject);
+            BackupJob.JobObjects.Remove(jobObject);
         }
 
         public void BeginBackup(IAlgorithm algorithm)
         {
             var restorePoint = new RestorePoint();
-            _repository.CreateBackupDir(restorePoint.GetDirectoryName());
-            List<Storage> storages = _repository.CreateBackup(algorithm, _backupJob.GetJobObjects(), restorePoint.GetDirectoryName(), restorePoint.GetRestorePointId());
-            restorePoint.GetStorages().AddRange(storages);
-            _backupJob.AddRestorePoint(restorePoint);
+            Repository.CreateBackupDir(restorePoint.DirectoryName);
+            List<Storage> storages = Repository.CreateBackup(algorithm, BackupJob.JobObjects, restorePoint.DirectoryName, restorePoint.Id);
+            restorePoint.Storages.AddRange(storages);
+            BackupJob.AddRestorePoint(restorePoint);
         }
     }
 }

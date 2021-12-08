@@ -13,7 +13,7 @@ namespace Backups
             foreach (JobObject jobObject in jobObjects)
             {
                 var storage = new Storage();
-                storage.GetJobObjects().Add(jobObject);
+                storage.JobObjects.Add(jobObject);
                 storages.Add(storage);
             }
 
