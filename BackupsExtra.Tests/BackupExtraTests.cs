@@ -35,22 +35,7 @@ namespace BackupsExtra.Tests
             _backupManager.CleanPoints(new AmountCleaning(), null,2);
             Assert.AreEqual(_backupManager.BackupJob.RestorePoints.Count, 2);
         }
-        
-        [Test]
-        public void CleanRestorePoints_DateAlgorithm()
-        {
-            JobObject jobObject1 = new JobObject(new FileInfo(@"../../../FilesExtra/File_A"));
-            JobObject jobObject2 = new JobObject(new FileInfo(@"../../../FilesExtra/File_B"));
-            _backupManager.AddJobObject(jobObject1);
-            _backupManager.AddJobObject(jobObject2);
-            _backupManager.BeginBackup(new SplitStorage());
-            DateTime date1 = _backupManager.BackupJob.RestorePoints[0].DateBackup;
-            _backupManager.BeginBackup(new SplitStorage());
-            DateTime date2 = _backupManager.BackupJob.RestorePoints[1].DateBackup;
-            _backupManager.CleanPoints(new DateCleaning(), date1);
-            Assert.AreEqual(_backupManager.BackupJob.RestorePoints.Count, 2);
-        }
-        
+
         [Test]
         public void MergeRestorePoints_SingleStorage()
         {
