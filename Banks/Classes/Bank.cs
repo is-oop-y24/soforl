@@ -22,15 +22,10 @@ namespace Banks.Classes
         public string Name { get; }
         public List<IObserver> Observers { get; }
 
-        public List<BankAccount> GetBankAccounts()
+        public BankAccount AddCreditAccount(Client client, double sum, double percentage, DateTime dateFinishing, int daysCommission)
         {
-            return BankAccounts;
-        }
-
-        public BankAccount AddCreditAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing, int daysCommission)
-        {
-            BankAccount bankAccount = new CreditAccount(percentage, sum, client, bank, dateFinishing, daysCommission);
-            bank.GetBankAccounts().Add(bankAccount);
+            BankAccount bankAccount = new CreditAccount(percentage, sum, client, this, dateFinishing, daysCommission);
+            BankAccounts.Add(bankAccount);
             return bankAccount;
         }
 
@@ -67,17 +62,17 @@ namespace Banks.Classes
             return client;
         }
 
-        public BankAccount AddDepositAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing)
+        public BankAccount AddDepositAccount(Client client, double sum, double percentage, DateTime dateFinishing)
         {
-            BankAccount bankAccount = new DepositAccount(sum, client, bank, dateFinishing);
-            bank.GetBankAccounts().Add(bankAccount);
+            BankAccount bankAccount = new DepositAccount(sum, client, this, dateFinishing);
+            BankAccounts.Add(bankAccount);
             return bankAccount;
         }
 
-        public BankAccount AddDebitAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing)
+        public BankAccount AddDebitAccount(Client client, double sum, double percentage, DateTime dateFinishing)
         {
-            BankAccount bankAccount = new DebitAccount(percentage, sum, client, bank, dateFinishing);
-            bank.GetBankAccounts().Add(bankAccount);
+            BankAccount bankAccount = new DebitAccount(percentage, sum, client, this, dateFinishing);
+            BankAccounts.Add(bankAccount);
             return bankAccount;
         }
 
