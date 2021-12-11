@@ -28,9 +28,9 @@ namespace Backups.Tests
             _backupManager.RemoveJobObject(jobObject2);
             _backupManager.BeginBackup(new SplitStorage());
 
-            Assert.AreEqual(_backupManager.GetBackupJob().GetRestorePoints().Count, 2);
-            Assert.AreEqual(_backupManager.GetBackupJob().GetRestorePoints()[0].GetStorages().Count, 2);
-            Assert.AreEqual(_backupManager.GetBackupJob().GetRestorePoints()[1].GetStorages().Count, 1);
+            Assert.AreEqual(_backupManager.BackupJob.RestorePoints.Count, 2);
+            Assert.AreEqual(_backupManager.BackupJob.RestorePoints[0].Storages.Count, 2);
+            Assert.AreEqual(_backupManager.BackupJob.RestorePoints[1].Storages.Count, 1);
         }
     }
 }

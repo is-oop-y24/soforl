@@ -8,8 +8,6 @@ namespace Backups.Classes
 {
     public class LocalRepository : IRepository
     {
-        private DirectoryInfo _directoryInfo;
-
         public LocalRepository(DirectoryInfo directoryInfo)
         {
             if (directoryInfo.FullName == string.Empty)
@@ -22,17 +20,19 @@ namespace Backups.Classes
                 Directory.CreateDirectory(directoryInfo.FullName);
             }
 
-            _directoryInfo = directoryInfo;
+            DirectoryInfo = directoryInfo;
         }
+
+        public DirectoryInfo DirectoryInfo { get; }
 
         public string GetPath()
         {
-            return _directoryInfo.FullName;
+            return DirectoryInfo.FullName;
         }
 
         public void CreateBackupDir(string directoryName)
         {
-            Directory.CreateDirectory($@"{_directoryInfo.FullName}/{directoryName}");
+            Directory.CreateDirectory($@"{DirectoryInfo.FullName}/{directoryName}");
         }
 
         public List<Storage> CreateBackup(IAlgorithm algorithm, List<JobObject> jobObjects, string directoryName, Guid id)
@@ -41,16 +41,16 @@ namespace Backups.Classes
             foreach (Storage storage in storages)
             {
                 var zip = new ZipFile();
-                foreach (JobObject jobObject in storage.GetJobObjects().ToList())
+                foreach (JobObject jobObject in storage.JobObjects.ToList())
                 {
                     zip.AddFile(jobObject.GetFilePath(), "/");
                     string newPath =
-                        @$"{_directoryInfo.FullName}/{directoryName}/{jobObject.GetFilePath().Substring(jobObject.GetFilePath().LastIndexOf(@"/") + 1)}_{id}.zip";
+                        @$"{DirectoryInfo.FullName}/{directoryName}/{jobObject.GetFilePath().Substring(jobObject.GetFilePath().LastIndexOf(@"/") + 1)}_{id}.zip";
                     var newJobObject = new JobObject(new FileInfo(newPath));
-                    storage.GetJobObjects().Add(newJobObject);
+                    storage.JobObjects.Add(newJobObject);
                 }
 
-                zip.Save(@$"{_directoryInfo.FullName}/{directoryName}/Archive{storage.GetStorageId()}.zip");
+                zip.Save(@$"{DirectoryInfo.FullName}/{directoryName}/Archive{storage.Id}.zip");
             }
 
             return storages;

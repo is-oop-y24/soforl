@@ -39,12 +39,12 @@ namespace Backups.Classes
             List<Storage> storages = algorithm.CreateStorages(jobObjects);
             foreach (Storage storage in storages)
             {
-                foreach (JobObject jobObject in storage.GetJobObjects().ToList())
+                foreach (JobObject jobObject in storage.JobObjects.ToList())
                 {
                     string newPath =
                         @$"{_directoryInfo.FullName}/{directoryName}/{jobObject.GetFilePath().Substring(jobObject.GetFilePath().LastIndexOf(@"/") + 1)}_{id}.zip";
                     var newJobObject = new JobObject(new FileInfo(newPath));
-                    storage.GetJobObjects().Add(newJobObject);
+                    storage.JobObjects.Add(newJobObject);
                 }
             }
 

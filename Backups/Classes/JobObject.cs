@@ -4,15 +4,16 @@ namespace Backups.Classes
 {
     public class JobObject
     {
-        private FileInfo fileInfo;
         public JobObject(FileInfo fileInfo)
         {
-            this.fileInfo = fileInfo;
+            FileInfo = fileInfo;
         }
+
+        public FileInfo FileInfo { get; }
 
         public string GetFilePath()
         {
-            return $"{fileInfo.DirectoryName}/{fileInfo.Name}";
+            return $"{FileInfo.DirectoryName}/{FileInfo.Name}";
         }
     }
 }
