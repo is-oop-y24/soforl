@@ -11,13 +11,13 @@ namespace BackupsExtra.Classes
         public void DeleteRestorePoint(RestorePoint restorePoint, ILogger logger)
         {
             RemoveRestorePoint(restorePoint);
-            logger.NotifyDeleteRestorePoint();
+            logger.NotifyChanges("Restore point deleted");
         }
 
         public void AddRestorePoint(RestorePoint restorePoint, ILogger logger)
         {
             RestorePoints.Add(restorePoint);
-            logger.NotifyAddRestorePoint();
+            logger.NotifyChanges("Restore point added");
         }
     }
 }

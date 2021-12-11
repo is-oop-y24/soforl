@@ -6,24 +6,9 @@ namespace BackupsExtra.Logging
 {
     public class FileLogger : ILogger
     {
-        public void NotifyAddJobObject()
+        public void NotifyChanges(string message)
         {
-            File.AppendAllText("NotifyFile.json", "Job object added");
-        }
-
-        public void NotifyAddRestorePoint()
-        {
-            File.AppendAllText("NotifyFile.json", "Restore Point added");
-        }
-
-        public void NotifyDeleteRestorePoint()
-        {
-            File.AppendAllText("NotifyFile.json", "Restore Point deleted");
-        }
-
-        public void NotifyDeleteJobObject()
-        {
-            File.AppendAllText("NotifyFile.json", "Job object deleted");
+            File.AppendAllText("NotifyFile.json", message);
         }
     }
 }

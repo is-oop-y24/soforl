@@ -24,19 +24,19 @@ namespace BackupsExtra.Classes
         public void AddExtraJobObject(JobObject jobObject, ILogger logger)
         {
             AddJobObject(jobObject);
-            logger.NotifyAddJobObject();
+            logger.NotifyChanges("Job object added");
         }
 
         public void RemoveExtraJobObject(JobObject jobObject, ILogger logger)
         {
             RemoveJobObject(jobObject);
-            logger.NotifyDeleteJobObject();
+            logger.NotifyChanges("Job object added");
         }
 
         public void BeginBackupExtra(IAlgorithm algorithm, ILogger logger)
         {
             BeginBackup(algorithm);
-            logger.NotifyAddRestorePoint();
+            logger.NotifyChanges("Restore point added");
         }
 
         public void Serialize()
