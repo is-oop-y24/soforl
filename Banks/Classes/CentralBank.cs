@@ -18,7 +18,7 @@ namespace Banks.Classes
         {
             foreach (Bank bank in _banks)
             {
-                foreach (BankAccount bankAccount in bank.GetBankAccounts())
+                foreach (BankAccount bankAccount in bank.BankAccounts)
                 {
                     bankAccount.CalculatePercentage(date);
                 }

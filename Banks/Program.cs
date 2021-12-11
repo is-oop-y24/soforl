@@ -38,19 +38,19 @@ namespace Banks
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account = bank.AddCreditAccount(client, bank, sum, 10, new DateTime(2021, 12, 30), 730);
+                account = bank.AddCreditAccount(client, sum, 10, new DateTime(2021, 12, 30), 730);
             }
             else if (number == 2)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account = bank.AddDebitAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account = bank.AddDebitAccount(client, sum, 10, new DateTime(2021, 12, 30));
             }
             else if (number == 3)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account = bank.AddDepositAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account = bank.AddDepositAccount(client, sum, 10, new DateTime(2021, 12, 30));
             }
             else
             {
@@ -61,7 +61,7 @@ namespace Banks
 
             foreach (Bank bank1 in centralBank.GetBanks())
             {
-                foreach (BankAccount account1 in bank1.GetBankAccounts())
+                foreach (BankAccount account1 in bank1.BankAccounts)
                 {
                     Console.WriteLine(account1.Sum);
                 }
@@ -72,7 +72,7 @@ namespace Banks
             centralBank.ScrollingTime(new DateTime(2021, 12, 29));
             foreach (var bank1 in centralBank.GetBanks())
             {
-                foreach (var account1 in bank1.GetBankAccounts())
+                foreach (var account1 in bank1.BankAccounts)
                 {
                     Console.WriteLine(account1.Sum);
                 }
@@ -86,19 +86,19 @@ namespace Banks
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account2 = bank.AddCreditAccount(client, bank, sum, 10, new DateTime(2021, 12, 30), 730);
+                account2 = bank.AddCreditAccount(client, sum, 10, new DateTime(2021, 12, 30), 730);
             }
             else if (number2 == 2)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account2 = bank.AddDebitAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account2 = bank.AddDebitAccount(client, sum, 10, new DateTime(2021, 12, 30));
             }
             else if (number2 == 3)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account2 = bank.AddDepositAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account2 = bank.AddDepositAccount(client, sum, 10, new DateTime(2021, 12, 30));
             }
             else
             {
@@ -113,7 +113,7 @@ namespace Banks
 
             foreach (var bank1 in centralBank.GetBanks())
             {
-                foreach (var account1 in bank1.GetBankAccounts())
+                foreach (var account1 in bank1.BankAccounts)
                 {
                     Console.WriteLine(account1.Sum);
                 }

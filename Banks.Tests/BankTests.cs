@@ -21,8 +21,8 @@ namespace Banks.Tests
             Bank bank = _centralBank.RegisterBank("Sberbank", 1000);
             Client client1 = bank.AddClient(bank,"Fedor", "Petrov");
             Client client2 = bank.AddClient(bank,"Petr", "Petrov");
-            BankAccount account1 = bank.AddDebitAccount(client1, bank, 19000, 10, new DateTime(2021, 12, 30));
-            BankAccount account2 = bank.AddDebitAccount(client2, bank, 14000, 10, new DateTime(2021, 12, 30));
+            BankAccount account1 = bank.AddDebitAccount(client1,19000, 10, new DateTime(2021, 12, 30));
+            BankAccount account2 = bank.AddDebitAccount(client2, 14000, 10, new DateTime(2021, 12, 30));
             Assert.Catch<Exception>(() =>
             {
                 account1.TransferPartMoney(2000, account2);
@@ -35,8 +35,8 @@ namespace Banks.Tests
             Bank bank = _centralBank.RegisterBank("Sberbank", 100000);
             Client client1 = bank.AddClient(bank,"Fedor", "Petrov");
             Client client2 = bank.AddClient(bank,"Petr", "Petrov");
-            BankAccount account1 = bank.AddDebitAccount(client1, bank, 19000, 10, new DateTime(2021, 12, 30));
-            BankAccount account2 = bank.AddCreditAccount(client2, bank, 10000, 10, new DateTime(2021, 12, 30), 10);
+            BankAccount account1 = bank.AddDebitAccount(client1, 19000, 10, new DateTime(2021, 12, 30));
+            BankAccount account2 = bank.AddCreditAccount(client2, 10000, 10, new DateTime(2021, 12, 30), 10);
             Assert.Catch<Exception>(() =>
             {
                 account2.TransferPartMoney(12000, account1);
@@ -49,8 +49,8 @@ namespace Banks.Tests
             Bank bank = _centralBank.RegisterBank("Sberbank", 1000);
             Client client1 = bank.AddClient(bank,"Fedor", "Petrov");
             Client client2 = bank.AddClient(bank,"Petr", "Petrov");
-            BankAccount account1 = bank.AddDebitAccount(client1, bank, 19000, 10, new DateTime(2021, 12, 30));
-            BankAccount account2 = bank.AddDebitAccount(client2, bank, 14000, 10, new DateTime(2021, 12, 30));
+            BankAccount account1 = bank.AddDebitAccount(client1, 19000, 10, new DateTime(2021, 12, 30));
+            BankAccount account2 = bank.AddDebitAccount(client2, 14000, 10, new DateTime(2021, 12, 30));
             bank.AddClientAddress("Lomonosova", client2);
             bank.AddClientPassport("meow", client2);
             account2.TransferPartMoney(2000, account1);
@@ -63,8 +63,8 @@ namespace Banks.Tests
             Bank bank = _centralBank.RegisterBank("Sberbank", 10000000);
             Client client1 = bank.AddClient(bank,"Fedor", "Petrov");
             Client client2 = bank.AddClient(bank,"Petr", "Petrov");
-            BankAccount account1 = bank.AddDebitAccount(client1, bank, 19000, 10, new DateTime(2021, 12, 30));
-            BankAccount account2 = bank.AddDebitAccount(client2, bank, 14000, 10, new DateTime(2021, 12, 30));
+            BankAccount account1 = bank.AddDebitAccount(client1,  19000, 10, new DateTime(2021, 12, 30));
+            BankAccount account2 = bank.AddDebitAccount(client2, 14000, 10, new DateTime(2021, 12, 30));
             bank.AddClientAddress("Lomonosova", client2);
             bank.AddClientPassport("meow", client2);
             account1.TransferPartMoney(2000, account2);
