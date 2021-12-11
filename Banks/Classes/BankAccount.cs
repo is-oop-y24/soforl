@@ -12,7 +12,7 @@ namespace Banks.Classes
             Sum = sum;
             Client = client;
             Bank = bank;
-            Limit = bank.GetTransferLimit();
+            Limit = bank.TransferLimit;
             Date = DateTime.Now;
             DateFinishing = dateFinishing;
             Transactions = new List<Transaction>();
@@ -27,7 +27,7 @@ namespace Banks.Classes
             Operation = bank.CheckPercentage(sum);
             Date = DateTime.Now;
             DateFinishing = dateFinishing;
-            Limit = bank.GetTransferLimit();
+            Limit = bank.TransferLimit;
             Transactions = new List<Transaction>();
             Transactions.Add(new Transaction(sum));
         }
@@ -129,20 +129,7 @@ namespace Banks.Classes
         public abstract double ChangeCommission(double newCommission);
         public virtual void Update(BankAccount account, double operation)
         {
-            if (account is DepositAccount depositAccount)
-            {
-                depositAccount.ChangePercentage(operation);
-            }
-
-            if (account is DebitAccount debitAccount)
-            {
-                debitAccount.ChangePercentage(operation);
-            }
-
-            if (account is CreditAccount creditAccount)
-            {
-                creditAccount.ChangePercentage(operation);
-            }
+            account.ChangePercentage(operation);
         }
     }
 }

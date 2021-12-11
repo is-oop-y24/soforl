@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Banks.Classes
@@ -26,9 +27,58 @@ namespace Banks.Classes
             return BankAccounts;
         }
 
-        public double GetTransferLimit()
+        public BankAccount AddCreditAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing, int daysCommission)
         {
-            return TransferLimit;
+            BankAccount bankAccount = new CreditAccount(percentage, sum, client, bank, dateFinishing, daysCommission);
+            bank.GetBankAccounts().Add(bankAccount);
+            return bankAccount;
+        }
+
+        public Client AddClient(Bank bank, string firstName, string lastName, string passport = "", string address = "")
+        {
+            if (!string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))
+            {
+                Client client = new Client.ClientBuilder()
+                    .BuildFirstName(firstName)
+                    .BuildLastName(lastName)
+                    .BuildPassport(passport)
+                    .BuildAddress(address)
+                    .Build();
+                if (!Clients.Contains(client))
+                {
+                    Clients.Add(client);
+                }
+
+                return client;
+            }
+
+            throw new Exception("Invalid client");
+        }
+
+        public Client AddClientAddress(string address, Client client)
+        {
+            client.AddAddress(address);
+            return client;
+        }
+
+        public Client AddClientPassport(string passport, Client client)
+        {
+            client.AddPassport(passport);
+            return client;
+        }
+
+        public BankAccount AddDepositAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing)
+        {
+            BankAccount bankAccount = new DepositAccount(sum, client, bank, dateFinishing);
+            bank.GetBankAccounts().Add(bankAccount);
+            return bankAccount;
+        }
+
+        public BankAccount AddDebitAccount(Client client, Bank bank, double sum, double percentage, DateTime dateFinishing)
+        {
+            BankAccount bankAccount = new DebitAccount(percentage, sum, client, bank, dateFinishing);
+            bank.GetBankAccounts().Add(bankAccount);
+            return bankAccount;
         }
 
         public void AddPercentageSum(double percentage, double sumAccount)
@@ -134,11 +184,6 @@ namespace Banks.Classes
             {
                 observer.Update(bankAccount, operation);
             }
-        }
-
-        public List<Client> GetClients()
-        {
-            return Clients;
         }
     }
 }

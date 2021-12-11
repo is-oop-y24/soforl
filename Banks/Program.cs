@@ -13,13 +13,13 @@ namespace Banks
             string name = Console.ReadLine();
             Console.WriteLine("Enter your last name");
             string lastName = Console.ReadLine();
-            Client client = centralBank.AddClient(bank, name, lastName);
+            Client client = bank.AddClient(bank, name, lastName);
             Console.WriteLine("Do you want to add address? Type yes or no");
             if (Console.ReadLine() == "yes")
             {
                 Console.WriteLine("Enter your address");
                 string address = Console.ReadLine();
-                centralBank.AddClientAddress(address, client);
+                bank.AddClientAddress(address, client);
             }
 
             Console.WriteLine("Do you want to add passport? Type yes or no");
@@ -27,7 +27,7 @@ namespace Banks
             {
                 Console.WriteLine("Enter your passport");
                 string passport = Console.ReadLine();
-                centralBank.AddClientPassport(passport, client);
+                bank.AddClientPassport(passport, client);
             }
 
             BankAccount account = null;
@@ -38,19 +38,19 @@ namespace Banks
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account = centralBank.AddCreditAccount(client, bank, sum, 10, new DateTime(2021, 12, 30), 730);
+                account = bank.AddCreditAccount(client, bank, sum, 10, new DateTime(2021, 12, 30), 730);
             }
             else if (number == 2)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account = centralBank.AddDebitAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account = bank.AddDebitAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
             }
             else if (number == 3)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account = centralBank.AddDepositAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account = bank.AddDepositAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
             }
             else
             {
@@ -86,19 +86,19 @@ namespace Banks
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account2 = centralBank.AddCreditAccount(client, bank, sum, 10, new DateTime(2021, 12, 30), 730);
+                account2 = bank.AddCreditAccount(client, bank, sum, 10, new DateTime(2021, 12, 30), 730);
             }
             else if (number2 == 2)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account2 = centralBank.AddDebitAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account2 = bank.AddDebitAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
             }
             else if (number2 == 3)
             {
                 Console.WriteLine("Write sum that will be on your bank account");
                 double sum = double.Parse(Console.ReadLine());
-                account2 = centralBank.AddDepositAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
+                account2 = bank.AddDepositAccount(client, bank, sum, 10, new DateTime(2021, 12, 30));
             }
             else
             {
